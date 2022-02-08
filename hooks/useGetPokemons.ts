@@ -9,5 +9,6 @@ export const useGetPokemons = (offset: number) => {
     pokemons: data?.data.results,
     isLoading: !error && !data?.data,
     isError: error,
+    count: data?.data.count
   };
 };

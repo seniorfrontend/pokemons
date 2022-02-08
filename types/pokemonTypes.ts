@@ -4,7 +4,7 @@ export interface Ipokemon {
 }
 
 export interface IpokemonSearchResponse {
-    count: number,
+    count?: number,
     next: string,
     previous: string,
     results: Ipokemon[]
