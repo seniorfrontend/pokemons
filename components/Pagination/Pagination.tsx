@@ -10,15 +10,17 @@ interface Iprops {
 }
 
 function Pagination({ totalCount = 0, paginationStep = PAGINATION_STEP, onPageChange }: Iprops) {
-    const [currentPage, setCurrentPage] = React.useState<number>(1);
+    const [currentPage, setCurrentPage] = React.useState<number>(0);
 
     const totalPages = React.useMemo(() => {
         return Math.ceil(totalCount / paginationStep)
     }, [totalCount, paginationStep]);
 
     const pagesList = React.useMemo(() => {
-        return Array.from(Array(totalPages).keys());
-    }, [totalPages]);
+        const startSlicing = (currentPage - 5) >= 0 ? currentPage - 5 : 0;
+        const endSlicing  = currentPage + 5;
+        return Array.from(Array(totalPages).keys()).slice(startSlicing, endSlicing);
+    }, [totalPages, currentPage]);
 
     if (!Array.isArray(pagesList) || pagesList.length <= 1) {
         return null
@@ -31,11 +33,17 @@ function Pagination({ totalCount = 0, paginationStep = PAGINATION_STEP, onPageCh
 
     return (
         <Styling.Container>
+            <Styling.Item onClick={paginationHandler(0)}>
+                First
+            </Styling.Item>
             {pagesList.map(page => (
                 <Styling.Item key={page} isActive={page === currentPage} onClick={paginationHandler(page)}>
                     {page + 1}
                 </Styling.Item>
             ))}
+            <Styling.Item onClick={paginationHandler(totalPages - 1)}>
+                Last
+            </Styling.Item>
         </Styling.Container>
     );
 }
